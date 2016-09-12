@@ -1,0 +1,27 @@
+.subscription-info h4{
+	display: inline-block;
+	font-weight: 600;
+}
+.subscription-content-wrapper{
+	width: 70%;
+	position: relative;
+	margin-right: auto;
+	margin-left: auto;
+}
+.subscription-info-table td{
+	border-top: none !important;
+	text-align: center;
+}
+.subscription-info-table{
+	font-size: 18px;
+}
+.subscription-title{
+	cursor: pointer;
+}
+.notification-area {
+    position: fixed;
+    top: 0;
+    width: 75%;
+    margin-left: 12.5%;
+    z-index: 200000;
+}

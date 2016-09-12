@@ -1,0 +1,55 @@
+body{
+	background: #f1f1f1;
+}
+ul.plan-content-settings{
+    position: relative;
+    width: 69%;
+    display: inline-block;
+}
+ul.plan-list {
+    width: 25%;
+    position: relative;
+    display: inline-block;
+    min-width: 200px;
+    float: left;
+    margin-top: 25px;
+    max-height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.tab-content.plan-content {
+    width: 70%;
+    display: inline-block;
+}
+.nav-container{
+	position: relative;
+}
+a{
+	outline: none;
+}
+.notification-area {
+    position: fixed;
+    width: 80%;
+    z-index: 2;
+    margin-left: 2.5%;
+}
+.subscribers td,.subscribers th, .subscribers input[type=number]{
+	text-align: center;
+}
+.post-type-title{
+    cursor: pointer;
+}
+.title-triangle{
+    border-left: 10px solid;
+    border-bottom: 10px solid transparent;
+    border-top: 10px solid transparent;
+    display: inline-block;
+    margin-right: 10px;
+    height: 0;
+    width: 0;
+    transition: 0.3s ease-in-out;
+}
+
+.post-type-title h2 {
+    display: inline-block;
+}
