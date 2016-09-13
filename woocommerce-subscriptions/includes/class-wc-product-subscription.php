@@ -8,6 +8,8 @@ class WC_Gateway_Stripe_Subscription extends WC_Gateway_Stripe
 	function __construct()
 	{
 		$this->id = 'stripe-subscriptions';
+		/*This code is frome WC_Stripe_Gateway
+		start*/
 		$this->method_title = __('Stripe', 'woocommerce-gateway-stripe-subscriptions');
 		$this->method_description = __('Stripe works by adding credit card fields on the checkout and then sending the details to Stripe for verification.', 'woocommerce-gateway-stripe-subscriptions');
 		$this->has_fields = true;
@@ -76,6 +78,7 @@ class WC_Gateway_Stripe_Subscription extends WC_Gateway_Stripe
 			'process_admin_options'
 		));
 		$this->temp = 'stripe-subscriptions';
+		/*end*/
 
 	}
 
@@ -145,7 +148,7 @@ class WC_Gateway_Stripe_Subscription extends WC_Gateway_Stripe
 	}
 
 	public
-
+	/* This functino is from WC_Stripe_PaymentGateway*/
 	function process_payment($order_id, $retry = true, $force_customer = false)
 	{
 		try {
@@ -172,7 +175,7 @@ class WC_Gateway_Stripe_Subscription extends WC_Gateway_Stripe
 				$post_data = $this->generate_possible_subscription_payment_request($order, $source);
 
 				// Make the request
-
+				//modified here
 				if ($post_data['amount'] > 0) {
 					$response = WC_Stripe_API::request($post_data);
 				}
@@ -264,7 +267,6 @@ class WC_Gateway_Stripe_Subscription extends WC_Gateway_Stripe
 		}
 
 		if ($display_tokenization) {
-			//$this->id = 'stripe';
 			$this->tokenization_script();
 			$this->saved_payment_methods();
 		}

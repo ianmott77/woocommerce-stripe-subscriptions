@@ -73,7 +73,7 @@ class SubscriptionController{
 
 	public function saveSubscription($subscription){
 		if($subscription instanceof Subscription){
-			$this->db->insert( 
+			return $this->db->insert( 
 				'wp_woocommerce_subscriptions', 
 				array( 
 					'token' => $subscription->token, 
@@ -84,7 +84,7 @@ class SubscriptionController{
 				)
 			);
 		}else{
-			$this->saveSubscription($this->createSubscription($subscription));
+			return $this->saveSubscription($this->createSubscription($subscription));
 		}
 	}
 

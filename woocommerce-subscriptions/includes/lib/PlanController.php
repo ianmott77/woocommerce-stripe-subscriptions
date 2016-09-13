@@ -24,7 +24,6 @@ class PlanController{
   			id mediumint(9) NOT NULL AUTO_INCREMENT,
 			plan mediumint(9) NOT NULL,
 			registered tinyint(1) NOT NULL DEFAULT 0,
-			content BLOB NULL,
   			UNIQUE KEY id (id)
 		) $charset_collate;";
 
@@ -62,7 +61,6 @@ class PlanController{
 				array( 
 					'plan' => $plan->plan, 
 					'registered' => $plan->registered,
-					'content' => $plan->content
 				)
 			);
 	}
@@ -73,7 +71,6 @@ class PlanController{
 				array( 
 					'plan' => $plan->plan, 
 					'registered' => $plan->registered,
-					'content' => $plan->content
 				),
 				array(
 					'plan' => $planID
@@ -116,7 +113,7 @@ class PlanController{
 	}
 
 	public function createPlan($arr){
-		return new Plan($arr['plan'], (isset($arr['registered'])) ? $arr['registered'] : 0, (isset($arr['content'])) ? $arr['content'] : null, (isset($arr['id'])) ? $arr['id'] : 0);
+		return new Plan($arr['plan'], (isset($arr['registered'])) ? $arr['registered'] : 0, (isset($arr['id'])) ? $arr['id'] : 0);
 	}
 
 	public function updateName($id){

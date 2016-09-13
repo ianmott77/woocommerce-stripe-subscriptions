@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__.'/SubscriptionController.php';
 require_once __DIR__.'/PlanController.php';
+require_once __DIR__.'/PlanContentTableController.php';
+
 
 
 class SubscriptionView{
@@ -76,21 +78,24 @@ class SubscriptionView{
 
 		jQuery('.content-save-button').click(function(e){
 			var self = jQuery(this);
-			var id = self.attr('data-plan-id');
+			var $id = self.attr('data-plan-id');
 			var checkBoxes = jQuery('.content-checkbox');
 			var json = [];
 			for(var i = 0; i < checkBoxes.length; i++){
-				if(checkBoxes[i].checked){
-					var id = jQuery(checkBoxes[i]).attr('data-post-id');
-					var postType = jQuery(checkBoxes[i]).attr('data-post-type');
-					var a = {
-						postType : postType,
-						id : id
+				if(parseInt(jQuery(checkBoxes[i]).attr('data-plan'), 10) == $id){
+					if(checkBoxes[i].checked){
+						var id = jQuery(checkBoxes[i]).attr('data-post-id');
+						var postType = jQuery(checkBoxes[i]).attr('data-post-type');
+						var a = {
+							postType : postType,
+							id : id
+						}
+						json.push(a);
 					}
-					json.push(a);
 				}
 			}
-			var ajax = new AJAX('<?php echo plugin_dir_url(__DIR__)?>ajax-functions/addPlanContent.php','plan_id='+id, null, null, function(response){
+			var ajax = new AJAX('<?php echo plugin_dir_url(__DIR__)?>ajax-functions/addPlanContent.php','plan_id='+$id, null, null, function(response){
+					console.log(response);
 					notify(parseInt(response, 10));
 				}
 			);
@@ -157,16 +162,17 @@ class SubscriptionView{
 				$t = $post->post_title;
 				$id = $post->ID;
 				$plan = $pc->getPlan($this->subscriptionController->planID);
-				$planContent = json_decode($plan->content);
+				$pcc = new PlanContentController($this->subscriptionController->planID);
+				$planContent = $pcc->getAll();
 				$checked = '';
 				for($i =0; $i < count($planContent); $i++){
-					if($planContent[$i]->id == $id){
+					if($planContent[$i]->content == $id){
 						$checked = 'checked';
 					}
 				}
 				$type = $post->post_type;
 				$str .= '<td>'.$t.'</td>';
-				$str .= '<td><input class="content-checkbox" data-post-id="'.$id.'" data-post-type="'.$type.'"" type="checkbox" name="'.strtolower($t).'" value="'.$t.'" '.$checked.'></td>';
+				$str .= '<td><input class="content-checkbox" data-plan="'.$this->subscriptionController->planID.'" data-post-id="'.$id.'" data-post-type="'.$type.'"" type="checkbox" name="'.strtolower($t).'" value="'.$t.'" '.$checked.'></td>';
 				$str .= '</tr>';
 				$i++;
 			}

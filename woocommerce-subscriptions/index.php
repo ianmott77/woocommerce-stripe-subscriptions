@@ -8,6 +8,7 @@
 require_once __DIR__.'/includes/lib/SubscriptionView.php';
 require_once __DIR__.'/includes/lib/SubscriptionsTableController.php';
 require_once __DIR__.'/includes/lib/PlanController.php';
+require_once __DIR__.'/includes/lib/PlanContentTableController.php';
 
 
 function register_woo_subscription_type(){
@@ -31,7 +32,6 @@ function init_woo_subscriptions(){
 		wp_enqueue_style('wc-subs', plugin_dir_url(__FILE__).'css/style.css');
 		wp_enqueue_script('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', array(), false, true);
 		wp_enqueue_script('ajax', plugin_dir_url(__FILE__).'js/AJAX.js');
-
 		$pc = new PlanController();
 		$plans = $pc->getAllPlans();?>
 		<div class="notification-area hide"></div>
@@ -117,34 +117,24 @@ function subscription_add_to_cart(){
 function install(){
 	PlanController::createTable();
 	SubscriptionController::createTable();
+	PlanContentTableController::createTable();
 }
 
 function user_is_subscribed($id){
-	$pc = new PlanController();
-	$post = get_post($id);
-	$plans = $pc->getAllPlans();
-	$protected = false;
-	for($i = 0; $i < count($plans); $i++){
-		$contents = json_decode($plans[$i]->content);
-		for($n = 0; $n < count($contents); $n++){
-			if($contents[$n]->id == $id){
-				$protected = true;
-				$sc = new SubscriptionController($plans[$i]->plan);
-				$subscriptions = $sc->getAllSubscriptions();
-				$userID = get_current_user_id();
-				for($h = 0; $h < count($subscriptions); $h++){
-					if($subscriptions[$h]->customerID == $userID){
-						return true;
-					}
-				}
+	$pctc = new PlanContentTableController();
+	$contents = $pctc->getPlanContent(array('content' => $id));
+	$notProtected = true;
+	if(count($contents) > 0 && isset($contents) && !empty($contents)){
+		$notProtected = false;
+		$sct = new SubscriptionsTableController();
+		foreach ($contents as  $content) {
+			$subs = $sct->getSubscriptions(array('customer_id' => get_current_user_id(), 'plan_id' => $content->plan));
+			if(count($subs) > 0){
+				return true;
 			}
-
 		}
 	}
-	if(!$protected){
-		return true;
-	}
-	return false;
+	return $notProtected;
 }
 
 function check_availibility($content){
