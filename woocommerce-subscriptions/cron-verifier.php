@@ -19,6 +19,4 @@ foreach ($pc->getAllPlans() as $plan) {
 		}
 	}
 }
-
-wp_mail('ian.mott@hotmail.com', 'Subscription Verifier', 'The subscription verifier has finished running');
 ?>
